@@ -35,7 +35,7 @@ const verifyTokenAndAuthen = (req, res, next) => {
 }
 
 const verifyTokenAndAdmin = (req, res, next) => {
-    verifyToken(req.res,() => {
+    verifyToken(req,res,() => {
         //เช็คว่าเป็น admin หรือ user
         if (req.user.isAdmin) {
             next()

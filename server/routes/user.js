@@ -1,24 +1,10 @@
 const router = require("express").Router();
-const User2 = require("../models/user2");
-const { verifyTokenAndAuthen , verifyToken } = require('./verifyToken')
+const { verifyTokenAndAuthen , verifyToken, verifyTokenAndAdmin } = require('./verifyToken')
+const { updateUser, deleteUser, getUser, getAllUser } = require('../controllers/user.controller')
 
-//UPDATE
-router.put("/:id", verifyTokenAndAuthen, async (req, res) => {
-    if (req.body.password) {
-        const user = await User2.findOne({ _id: req.params.id });
-        req.body.password = await bcrypt.compareSync(password, user.password);
-    }
-    try {
-        const updateUser = await User2.findByIdAndUpdate(req.params.id, {
-            $set: req.body
-        }, {new: true }
-        )
-        res.status(200).json(updateUser)
-
-    } catch(err) {
-        res.status(500).json(err);
-    }
-})
-
+router.put("/:id",verifyTokenAndAuthen, updateUser)
+router.delete("/delete/:id",verifyTokenAndAuthen, deleteUser)
+router.get("/find/:id", verifyTokenAndAdmin, getUser)
+router.get("/findAll", verifyTokenAndAdmin, getAllUser)
 
 module.exports = router
