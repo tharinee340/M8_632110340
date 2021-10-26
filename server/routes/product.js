@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { verifyTokenAndAuthen , verifyToken, verifyTokenAndAdmin } = require('./verifyToken')
+const { verifyTokenAndAdmin } = require('./verifyToken')
 const { addProduct, updateProduct, deleteProduct, getProduct, getAllProduct } = require('../controllers/product.controller')
 
 router.post('/add', verifyTokenAndAdmin, addProduct)
