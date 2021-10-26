@@ -78,14 +78,20 @@ module.exports = {
       const match = await bcrypt.compareSync(password, user.password);
       console.log(match)
       if (match) {
-        res.status(200).json("login success")
+        const accessToken = jwt.sign({
+          id: user._id,
+          isAdmin: user.isAdmin,
+        }, process.env.JWT_SECRET,
+          {expiresIn: "5d"}  //อยู่ได้5วัน
+        )
+
+        //ให้แสดงข้อมูลuser แต่ไม่เอาpassword
+        const {password, ...others} = user._doc; 
+        res.status(200).json({...others, accessToken})
       } else {
         res.status(401).json("Wrong credential!")
       }
-      console.log(hashedPassword)
-        .catch(err => {
-          console.log(err)
-        })
+      
     } catch (err) {
       res.status(500).json(err)
     }
