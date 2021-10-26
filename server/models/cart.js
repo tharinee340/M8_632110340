@@ -2,7 +2,7 @@ const mongoose = require("../configs/database");
 const Schema = mongoose.Schema
 
 const CartSchema = new Schema({
-        userId = { type: Number, required: true },
+        userId: { type: Number, required: true },
         products = [
             {
                 productId: {
