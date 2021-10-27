@@ -48,8 +48,8 @@ module.exports = {
     }
   },
 
-  register: async (req, res, next) => {
-    try {
+  register: async (req, res) => {
+    
       const name = req.body.name
       const email = req.body.email
       const password = req.body.password
@@ -61,15 +61,18 @@ module.exports = {
         password: hashedPassword,
 
       })
-
+    try {
       const saveUser = await newUser.save();
       res.status(200).json(saveUser);
     } catch (err) {
       res.status(500).json("This Email is already use.");
     }
+    
+   
+
 
   },
-  login: async (req, res, next) => {
+  login: async (req, res) => {
     try {
       const user = await User2.findOne({ email: req.body.email });
       const password = req.body.password

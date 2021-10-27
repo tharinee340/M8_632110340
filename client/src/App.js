@@ -12,9 +12,10 @@ import AdminUpdateProduct from "./pages/AdminUpdateProduct.js";
 import AdminAddProduct from "./pages/AdminAddProduct.js";
 import Success from "./pages/Success.js";
 import ProductList from "./pages/ProductList"
+import { useSelector } from "react-redux";
 
 function App() {
-  const user = true
+  const user = useSelector((state) => state.user.currentUser)
   return (
     <>
     {/* <GlobalStyle/> */}

@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import {Row, Col, Button} from 'react-bootstrap';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const Container = styled.div`
     
@@ -52,6 +54,23 @@ const Login = styled.p`
 `
 
 const InputRegister = () => {
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const history = useHistory();
+
+    const addUser = (event) => {
+        event.preventDefault();
+        axios.post('http://localhost:8080/auth/register', {
+            name: name,
+            email: email,
+            password: password
+        }).then((res) => {
+            console.log(res);
+            localStorage.setItem(`token`, res.data)
+            history.push('/home')
+        })
+    }
     return (
         <Container>
             <Row>
@@ -67,7 +86,7 @@ const InputRegister = () => {
                             <Input placeholder="Name"/>
                             <Input placeholder="Email address"/>
                             <Input placeholder="Password"/>
-                            <Button variant="dark" style={{width: "100%", height: 45, borderRadius: 10, marginTop: 20}}>SIGN UP</Button>
+                            <Button variant="dark" style={{width: "100%", height: 45, borderRadius: 10, marginTop: 20}} onClick={addUser}>SIGN UP</Button>
                             <Login>Already have account ?</Login>
                         </Form>
                         

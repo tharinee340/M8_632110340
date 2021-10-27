@@ -1,7 +1,13 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import Facebook from '../Components/Facebook'
 import {Row, Col, Button} from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from './login/apiLogin';
+import axios from 'axios';
+import { Link, useHistory } from 'react-router-dom'
+
+
 const Container = styled.div`
     
 `
@@ -49,9 +55,42 @@ const Register = styled.p`
         color: black;
     }
 `
+const Error = styled.span`
+    color: red;
+    justify-content: center;
+    display: flex;
+    padding-top: 20px;
+`
 
 
 const InputLogin = () => {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const { err } = useSelector((state) => state.user)
+
+    const handleLogin = (e) => {
+        e.preventDefault()
+        login(dispatch, {email, password})
+    }
+
+    // const login = (event) => {
+    //     event.preventDefault();
+    //     axios.post('http://localhost:8080/auth/login', {
+    //         email: email,
+    //         password: password
+    //     }).then((res) => {
+    //         localStorage.setItem(`token`, res.data);
+    //         history.push('/home')
+    //     })
+    // }
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/auth/login').then((response) => {
+            console.log(response)
+        })
+    })
     return (
         <Container>
             <Row>
@@ -64,11 +103,17 @@ const InputLogin = () => {
                     <Right>
                         <Form>
                             <Title>SIGN IN</Title>
-                            <Input placeholder="Email address"/>
-                            <Input placeholder="Password"/>
-                            <Button variant="dark" style={{width: "100%", height: 45, borderRadius: 10, marginTop: 20}}>SIGN IN</Button>
+                            <Input placeholder="Email address" onChange={(e) => setEmail(e.target.value)}/>
+                            <Input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)}/>
+                            <Button variant="dark"
+                                    style={{width: "100%", height: 45, borderRadius: 10, marginTop: 20}}
+                                    onClick={handleLogin}
+                                    >SIGN IN</Button>
                             <Facebook />
+                            { err && <Error>Something went wrong</Error>}
+                            <Link to="/register">
                             <Register>Register ?</Register>
+                            </Link>
                         </Form>
                         
                         
