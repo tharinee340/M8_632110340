@@ -26,17 +26,20 @@ export const categories = [
     {
         id: 1,
         img: "https://img.ltwebstatic.com/images3_pi/2021/07/24/1627093887aed24754c93482c486f67e1662938afb.webp",
-        title: "Product 1",
+        title: "T-SHIRT",
+        cate: "t-shirt"
     },
     {
         id: 2,
         img: "https://img.ltwebstatic.com/images3_pi/2021/07/07/1625661130d31d38e4cc628a395892345f8cf19b70.webp",
-        title: "Product 2",
+        title: "SHIRT",
+        cate: "shirt"
     },
     {
         id: 3,
         img: "https://img.ltwebstatic.com/images3_pi/2021/04/01/1617263800e121f8416761757bc2364e1982c2d6a6.webp",
-        title: "Product 3",
+        title: "CROP TOP",
+        cate: "cropTop"
     },
 ]
 

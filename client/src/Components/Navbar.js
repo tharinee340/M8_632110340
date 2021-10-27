@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import SearchIcon from '@mui/icons-material/Search';
 import Badge from '@mui/material/Badge';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import {Link} from 'react-router-dom'
+import { useSelector } from 'react-redux';
 //เหมือนกับเราตั้ง className แล้วใส่ styled แต่เป็น component แทนจะได้เรียกได้ทุกที่และง่ายกว่า
 const Container = styled.div`
     height: 60px;
@@ -70,11 +72,17 @@ const MenuItemLeft = styled.div`
     
 `
 const Navbar = () => {
+    //เอาค่า initialstate ของ quantity มา จากredux
+    const quantity = useSelector(state => state.cart.quantity)
+    console.log(quantity)
+
     return (
         <Container>
             <Wrapper>
                <Left>
+                <Link to={'/home'} style={{textDecoration: "none", color: "gray"}}>
                <MenuItemLeft>HOME</MenuItemLeft>
+                </Link>
                    <SearchContainer>
                        <Input placeholder="Search.."/>
                        <SearchIcon style={{color: "gray", fontSize: 18}}/>
@@ -86,11 +94,13 @@ const Navbar = () => {
                <Right>
                    <MenuItemRight>REGISTER</MenuItemRight>
                    <MenuItemRight>SIGN IN</MenuItemRight>
+                   <Link to={'/cart'}>
                    <MenuItemRight>
-                        <Badge badgeContent={5} color="primary">
+                        <Badge badgeContent={quantity} color="primary">
                             <ShoppingCartOutlinedIcon color="action" />
                         </Badge>
                    </MenuItemRight>
+                   </Link>
                </Right>
             </Wrapper>
         </Container>

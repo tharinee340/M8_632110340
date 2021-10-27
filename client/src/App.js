@@ -1,17 +1,20 @@
 import Home from "./pages/Home.js";
 import Login from "./pages/Login";
-import { Switch, Route } from 'react-router'
+import { Switch, Route, Redirect } from 'react-router'
 import Test from "./pages/test.js";
 // import GlobalStyle from "./Components/GlobalStyle";
 import Footer from "./Components/Footer.js";
 import Detail from "./pages/Detail.js";
-import Cart from "./pages/Cart"
+import Cart from "./pages/Cart.js"
 import Register from "./pages/Register.js"; 
 import Admin from "./pages/Admin.js";
 import AdminUpdateProduct from "./pages/AdminUpdateProduct.js";
 import AdminAddProduct from "./pages/AdminAddProduct.js";
+import Success from "./pages/Success.js";
+import ProductList from "./pages/ProductList"
 
 function App() {
+  const user = true
   return (
     <>
     {/* <GlobalStyle/> */}
@@ -25,17 +28,23 @@ function App() {
         <Route path="/detail/:id">
           <Detail/>
         </Route>
+        <Route path="/products/:category">
+          <ProductList/>
+        </Route>
         <Route path="/admin">
           <Admin/>
+        </Route>
+        <Route path="/success">
+          <Success/>
         </Route>
         <Route path="/test-logout ">
           <Test/>
         </Route>
         <Route path="/login">
-          <Login/>
+          {user ? <Redirect to="/home"/> : <Login/>}
         </Route>
         <Route path="/register">
-          <Register/>
+          {user ? <Redirect to="/home"/> : <Register/>}
         </Route>
         <Route path="/cart">
           <Cart/>

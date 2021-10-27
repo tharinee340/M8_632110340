@@ -21,10 +21,8 @@ const verifyToken = (req, res, next) => {
 
 //เช็คว่าเป็น admin รึป่าว
 const verifyTokenAndAuthen = (req, res, next) => {
-    
     verifyToken(req,res,() => {
-        //เช็คว่าเป็น admin หรือ user
-       
+        //เช็คว่าเป็น admin หรือ user      
         if (req.user.id === req.params.id || req.user.isAdmin) {
             
             next()

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import {Button} from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const Container = styled.div`
     flex: 1;
@@ -40,12 +41,13 @@ const Title = styled.h1`
 const CategoryItem = ({item, className}) => {
     return (
         <Container className={className}>
+            <Link to={`/products/${item.cate}`}>
             <Image src={item.img} alt={item.title}/>
             <Info>
                 <Title>{item.title}</Title>
                 <Button variant="light" className="btn-shop">SHOP NOW</Button>
             </Info>
-                
+            </Link>    
         </Container>
     )
 }

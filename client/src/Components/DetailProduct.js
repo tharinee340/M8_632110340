@@ -1,6 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { Button, Row, Col } from 'react-bootstrap'
+import { useLocation } from 'react-router';
+import axios from 'axios'
+import { addCartProduct } from './cart/reducers';
+import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 
 const Container = styled.div`
     margin: 3% 5%;
@@ -47,20 +52,6 @@ const OptionTitle = styled.span`
   font-size: 20px;
   font-weight: 300;
 `
-const Quantity = styled.select`
-    border-radius: 5px;
-    margin: 0 10px;
-    padding: 5px;
-    cursor: pointer;
-    border: 1px solid lightgray;
-    transition: 0.5s;
-
-    &:hover {
-        border: 1px solid black;
-    }
-
-`
-const OptionQuantity = styled.option` `
 const Size = styled.select`
     border-radius: 5px;
     margin: 0 10px;
@@ -94,8 +85,74 @@ const Color = styled.div`
         height: 25px;
     }
 `
+const QuantityContainer = styled.div`
+
+`
+const AmountContainer = styled.div`
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+`;
+
+const Amount = styled.span`
+  width: 60px;
+  height: 40px;
+    border-radius: 5px;
+  border: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 5px;
+`;
+
 
 const DetailProduct = () => {
+    const location = useLocation();
+    const productId = location.pathname.split('/')[2];
+    const history = useHistory()
+    const [ product, setProduct ] = useState({});
+    const [ quantity, setQuantity ] = useState(1);
+    const [ color, setColor ] = useState("");
+    const [ size, setSize ] = useState("");
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const getProduct = async ()=> {
+            try {
+                const response = await axios.get(`http://localhost:8080/product/find/${productId}`) 
+                setProduct(response.data);
+                
+            } catch(err) {
+                console.log(err)
+            }
+        };
+ 
+        getProduct()
+    }, [productId])
+
+    const clickQuantity = (type) => {
+        if (type === "remove") {
+            setQuantity(quantity - 1)
+            if (quantity <= 0) {
+                setQuantity(0)
+            }
+            
+        } else {
+            setQuantity(quantity + 1)
+            if (quantity >= product.quantity) {
+                setQuantity(product.quantity)
+            }
+        }
+        
+    }
+    const clickAddCart = () => {
+        dispatch(
+            addCartProduct({...product, quantity,color, size, price:product.price*quantity})
+        )
+        history.push('/cart')
+        
+    }
+
     return (
         <Container>
 
@@ -103,44 +160,45 @@ const DetailProduct = () => {
 
                 <Col md={6}>
                     <ImgContainer>
-                        <Image src="https://pomelofashion.imgix.net/img/p/2/3/3/9/7/9/233979.jpg?auto=compress,format&fm=webp,jpg,png&w=739&q=55" />
+                        <Image src={product.img} />
                     </ImgContainer>
 
                 </Col>
 
                 <Col md={6}>
                     <InfoContainer>
-                        <Title>Product</Title>
-                        <Description>Lorem ipsum dolor sit amet, sapien etiam, nunc amet dolor ac odio mauris justo. Luctus arcu, urna praesent at id quisque ac. .</Description>
-                        <Price>THB 2000</Price>
+                        <Title>{product.title}</Title>
+                        <Description>{product.desc}</Description>
+                        <Price>THB {product.price}</Price>
 
                         <ColorContainer>
                             <OptionTitle>Color</OptionTitle>
-                            <Color color="#90cfa6" />
-                            <Color color="#f6cf72" />
+                            {product.color?.map((c) => (
+                                <Color color={c} key={c} onClick={(e) => setColor(c)}/>
+                            ))}  
                         </ColorContainer>
                         <OptionContainer>
                             <Option>
                                 <OptionTitle>Size</OptionTitle>
-                                <Size>
-                                    <OptionSize >XS</OptionSize>
-                                    <OptionSize >S</OptionSize>
-                                    <OptionSize >M</OptionSize>
-                                    <OptionSize >L</OptionSize>
-                                    <OptionSize >XL</OptionSize>
+                                <Size onChange={(e) => setSize(e.target.value)}>
+                                {product.size?.map((s) => (
+                                    <OptionSize key={s}>{s}</OptionSize>
+                                ))}
+                             
                                 </Size>
                             </Option>
-                            <Option>
-                                <OptionTitle>Quantity</OptionTitle>
-                                <Quantity>
-                                    <OptionQuantity>1</OptionQuantity>
-                                    <OptionQuantity>2</OptionQuantity>
-                                    <OptionQuantity>3</OptionQuantity>
-                                </Quantity>
 
-                            </Option>
+                            <QuantityContainer>
+                                <AmountContainer>
+                                <Button variant="outline-dark" onClick={() => clickQuantity("remove")}>-</Button>
+                                <Amount>{quantity}</Amount>
+                                <Button variant="outline-dark" onClick={() => clickQuantity("add")}>+</Button>
+                                </AmountContainer>
+                            </QuantityContainer>
                         </OptionContainer>
-                        <Button variant="dark" style={{ marginTop: "10%", width: "80%", height: 45 }}>ADD TO CART</Button>
+                        
+
+                        <Button variant="dark" style={{ marginTop: "10%", width: "80%", height: 45 }} onClick={() => clickAddCart()}>ADD TO CART</Button>
                     </InfoContainer>
                 </Col>
 

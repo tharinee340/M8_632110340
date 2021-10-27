@@ -1,31 +1,44 @@
-import React from 'react'
+import {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { products } from '../asset/data'
 import ShowProduct from './ShowProduct'
 import {Row} from 'react-bootstrap';
+import { useParams } from 'react-router';
+import axios from 'axios';
 
 const ContainerSide = styled.div`
-    margin: 0 5%;
+    margin: 0 5% 5% 5%;
 `
-const Title = styled.h1`
-    margin-top:40px;
-    margin-bottom: 20px;
-    
-`
+
 const Container = styled.div`
 `
 
 const Products = () => {
+    const { category } = useParams();
+    const [products, setProducts] = useState([])
+
+    useEffect(() => {
+        const getProducts = async () => {
+            try {
+                const response = await axios.get( category ? `http://localhost:8080/product/?category=${category}` : `http://localhost:8080/product/`);
+                console.log(response.data) 
+                setProducts(response.data)
+            } catch (err) {
+                console.log(err)
+            }
+           
+        };
+        getProducts()
+    }, [])
     return (
         <>
         <ContainerSide>
-        <Title>RECOMEND</Title>
         
             <Container>
                 <Row>
 
               {products.map(product => (
-                 <ShowProduct product={product} key={product.id}/>
+                 <ShowProduct product={product} key={product._id}/>
                ))}
           
                 </Row>

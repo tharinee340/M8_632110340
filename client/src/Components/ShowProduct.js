@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import {Col} from 'react-bootstrap';
+import { Link } from 'react-router-dom'
 
 const Info = styled.div`
     text-align: center;
@@ -34,7 +35,7 @@ const ImageContainer = styled.div`
     
 `
 const Image = styled.img`
-    padding: 10px;
+    
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -64,7 +65,9 @@ const ShowProduct = ({product}) => {
                     <ImageContainer>
                         <Image src={product.img}/>
                         <Info>
+                            <Link to={`/detail/${product._id}`}>
                             <Icon><SearchIcon/></Icon>
+                            </Link>
                             <Icon><ShoppingCartOutlinedIcon/></Icon>
                         </Info>
                     </ImageContainer>

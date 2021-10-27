@@ -40,8 +40,20 @@ module.exports = {
         }
     },
     getAllProduct: async (req, res) => {
+        
+        const queryCategory = req.query.category;
         try {
-            const products = await Products.find()
+            let products 
+            if (queryCategory) {
+                products = await Products.find({
+                    category: {
+                        $in: [queryCategory]
+                    }
+                })
+
+            } else {
+                products = await Products.find()
+            }
             res.status(200).json(products)
         } catch(err) {
             res.status(500).json(err)
