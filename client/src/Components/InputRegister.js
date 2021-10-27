@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import {Row, Col, Button} from 'react-bootstrap';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useHistory , Link} from 'react-router-dom';
 
 const Container = styled.div`
     
@@ -59,35 +59,32 @@ const InputRegister = () => {
     const [password, setPassword] = useState("")
     const history = useHistory();
 
-    const addUser = (event) => {
-        event.preventDefault();
+    const addUser = (e) => {
+        e.preventDefault();
         axios.post('http://localhost:8080/auth/register', {
             name: name,
             email: email,
             password: password
-        }).then((res) => {
-            console.log(res);
-            localStorage.setItem(`token`, res.data)
-            history.push('/home')
         })
+        history.push('/login')
     }
     return (
         <Container>
             <Row>
-                <Col md={7}>
+                <Col md={7} sm={6}>
                     <Left>
                         <Image src=""/>
                     </Left>
                 </Col>
-                <Col md={5}>
+                <Col md={5} sm={6}>
                     <Right>
                         <Form>
                             <Title>SIGN UP</Title>
-                            <Input placeholder="Name"/>
-                            <Input placeholder="Email address"/>
-                            <Input placeholder="Password"/>
+                            <Input placeholder="Name"  onChange={(e) => setName(e.target.value)}/>
+                            <Input placeholder="Email address"  onChange={(e) => setEmail(e.target.value)}/>
+                            <Input placeholder="Password"  onChange={(e) => setPassword(e.target.value)}/>
                             <Button variant="dark" style={{width: "100%", height: 45, borderRadius: 10, marginTop: 20}} onClick={addUser}>SIGN UP</Button>
-                            <Login>Already have account ?</Login>
+                            <Link to="/login" style={{textDecoration: "none"}}><Login>Already have account ?</Login></Link>
                         </Form>
                         
                         

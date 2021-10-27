@@ -111,7 +111,7 @@ const InputLogin = () => {
                                     >SIGN IN</Button>
                             <Facebook />
                             { err && <Error>Something went wrong</Error>}
-                            <Link to="/register">
+                            <Link to="/register" style={{textDecoration: "none"}}>
                             <Register>Register ?</Register>
                             </Link>
                         </Form>
